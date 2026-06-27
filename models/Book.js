@@ -10,6 +10,7 @@ const bookSchema = new mongoose.Schema({
   publishYear: { type: Number },
   publisher:   { type: String, trim: true },
   description: { type: String, trim: true },
+  imageUrl:    { type: String, trim: true },
 }, { timestamps: true });
 
 bookSchema.index({ title: 'text', author: 'text', isbn: 'text' });

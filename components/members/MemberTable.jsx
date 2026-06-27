@@ -1,5 +1,6 @@
 'use client';
 import { useMutation, gql } from '@apollo/client';
+import { useSession } from 'next-auth/react';
 import Badge from '@/components/ui/Badge.jsx';
 
 const DELETE_MEMBER = gql`
@@ -7,6 +8,8 @@ const DELETE_MEMBER = gql`
 `;
 
 export default function MemberTable({ members, onEdit, onRefetch }) {
+  const { data: session } = useSession();
+  const isAdmin = session?.user?.role === 'admin';
   const [deleteMember] = useMutation(DELETE_MEMBER);
 
   async function handleDelete(member) {
@@ -56,7 +59,9 @@ export default function MemberTable({ members, onEdit, onRefetch }) {
               <td className="py-3 px-4 text-center font-semibold text-gray-700">{m.activeLoans ?? 0}</td>
               <td className="py-3 px-4 text-right">
                 <button onClick={() => onEdit(m)} className="text-blue-600 hover:text-blue-800 font-medium mr-4">Sửa</button>
-                <button onClick={() => handleDelete(m)} className="text-red-500 hover:text-red-700 font-medium">Xóa</button>
+                {isAdmin && (
+                  <button onClick={() => handleDelete(m)} className="text-red-500 hover:text-red-700 font-medium">Xóa</button>
+                )}
               </td>
             </tr>
           ))}

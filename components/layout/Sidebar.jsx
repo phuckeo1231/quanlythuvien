@@ -1,17 +1,24 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 
 const NAV = [
   { href: '/dashboard', label: 'Tổng quan',  icon: '📊' },
   { href: '/books',     label: 'Sách',        icon: '📚' },
   { href: '/members',   label: 'Thành viên',  icon: '👥' },
   { href: '/loans',     label: 'Mượn / Trả',  icon: '🔄' },
+  { href: '/reports',   label: 'Báo cáo',     icon: '📈' },
+];
+
+const ADMIN_NAV = [
+  { href: '/users', label: 'Nhân viên', icon: '🛡️' },
 ];
 
 export default function Sidebar() {
   const path = usePathname();
+  const { data: session } = useSession();
+  const nav = session?.user?.role === 'admin' ? [...NAV, ...ADMIN_NAV] : NAV;
 
   return (
     <aside className="w-60 min-h-screen bg-white border-r border-gray-200 flex flex-col">
@@ -28,7 +35,7 @@ export default function Sidebar() {
 
       {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-1">
-        {NAV.map(item => {
+        {nav.map(item => {
           const active = path === item.href || path.startsWith(item.href + '/');
           return (
             <Link

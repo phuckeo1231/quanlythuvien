@@ -9,7 +9,7 @@ const GET_LOANS = gql`
   query GetLoans($status: String, $page: Int) {
     loans(status: $status, page: $page, limit: 10) {
       loans {
-        id status borrowDate dueDate returnDate fine note
+        id status borrowDate dueDate returnDate fine note finePaid finePaidAt extendCount
         book   { id title author }
         member { id name email }
       }

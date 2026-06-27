@@ -8,6 +8,9 @@ const loanSchema = new mongoose.Schema({
   returnDate: { type: Date },
   status:     { type: String, enum: ['active', 'returned', 'overdue'], default: 'active' },
   fine:       { type: Number, default: 0 },
+  finePaid:   { type: Boolean, default: false },
+  finePaidAt: { type: Date },
+  extendCount: { type: Number, default: 0 },
   note:       { type: String, trim: true },
 }, { timestamps: true });
 

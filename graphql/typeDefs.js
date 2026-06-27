@@ -10,6 +10,7 @@ export const typeDefs = `#graphql
     publishYear: Int
     publisher: String
     description: String
+    imageUrl: String
     createdAt: String
   }
 
@@ -27,14 +28,25 @@ export const typeDefs = `#graphql
 
   type Loan {
     id: ID!
-    book: Book!
-    member: Member!
+    book: Book
+    member: Member
     borrowDate: String!
     dueDate: String!
     returnDate: String
     status: String!
     fine: Float
+    finePaid: Boolean!
+    finePaidAt: String
+    extendCount: Int!
     note: String
+  }
+
+  type User {
+    id: ID!
+    name: String!
+    email: String!
+    role: String!
+    createdAt: String
   }
 
   type Stats {
@@ -44,6 +56,17 @@ export const typeDefs = `#graphql
     overdueLoans: Int!
     returnedToday: Int!
     totalFines: Float!
+    unpaidFines: Float!
+  }
+
+  type BookStat   { book: Book!     count: Int! }
+  type MemberStat { member: Member! count: Int! }
+  type MonthlyStat { month: String! count: Int! }
+
+  type Reports {
+    topBooks: [BookStat!]!
+    topMembers: [MemberStat!]!
+    monthlyLoans: [MonthlyStat!]!
   }
 
   type Query {
@@ -58,6 +81,9 @@ export const typeDefs = `#graphql
     recentLoans(limit: Int): [Loan!]!
 
     stats: Stats!
+    reports: Reports!
+
+    users: [User!]!
   }
 
   type BookResult   { books: [Book!]!     total: Int! }
@@ -75,6 +101,12 @@ export const typeDefs = `#graphql
 
     borrowBook(bookId: ID!, memberId: ID!, dueDate: String!, note: String): Loan!
     returnBook(loanId: ID!): Loan!
+    extendLoan(loanId: ID!, newDueDate: String!): Loan!
+    payFine(loanId: ID!): Loan!
+
+    createUser(input: UserInput!): User!
+    updateUser(id: ID!, input: UserInput!): User!
+    deleteUser(id: ID!): Boolean!
   }
 
   input BookInput {
@@ -86,6 +118,7 @@ export const typeDefs = `#graphql
     publishYear: Int
     publisher: String
     description: String
+    imageUrl: String
   }
 
   input MemberInput {
@@ -95,5 +128,12 @@ export const typeDefs = `#graphql
     address: String
     membershipType: String
     status: String
+  }
+
+  input UserInput {
+    name: String!
+    email: String!
+    password: String
+    role: String
   }
 `;
