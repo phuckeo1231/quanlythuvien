@@ -4,6 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "backend": "npm --prefix library-management-api run start:dev",
+    "backend:build": "npm --prefix library-management-api run build",
+    "backend:test": "npm --prefix library-management-api run test",
     "build": "next build",
     "start": "next start"
   },
